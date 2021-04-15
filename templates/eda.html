@@ -1,0 +1,257 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="{% static 'Style/theme.css' %}">
+    <link rel="stylesheet" href="{% static 'Style/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Exploratory Data Analysis</title>
+    <style>
+    </style>
+    <script>
+        function openBar() {
+            document.getElementById("sidebar").style.display = "block";
+            document.getElementById("overlay").style.display = "block";
+        }
+        
+        function closeBar() {
+            document.getElementById("sidebar").style.display = "none";
+            document.getElementById("overlay").style.display = "none";
+        }
+    </script>
+
+</head>
+<body>
+    <div class='w3-modal' id='loader' style='z-index:4'>
+        <div class="w3-modal-content w3-black w3-padding" style='width:80px'>
+            <center>
+            <div class='loader'></div>
+            </center>
+        </div>
+    </div>
+    <div class="w3-bar w3-top w3-theme w3-large" style="z-index:4">
+        <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="openBar();"><i class="fa fa-bars"></i>  Menu</button>
+        <span class="w3-bar-item w3-right">Logo</span>
+    </div>
+    {% include 'navUrls.html' with url='eda' %}
+    <div class="w3-main w3-text-theme-d2" style="margin-left:350px;margin-top:45px">
+        <div class='w3-xlarge w3-text-theme-d2 w3-padding w3-border-bottom w3-border-black'>
+            Eda page
+        </div>
+        <div class='w3-content'>
+            <div id='selectPath'>
+                <div class='w3-section w3-padding'>
+                    <label for="path">Path for the excel file. We accept csv, xlsx, xlsm formats</label>
+                    <input type="text" class='w3-input w3-border w3-round' placeholder="Write the path here" id='path' name='path'>
+                </div>
+                <div class='w3-center'>
+                    <button class='w3-button w3-theme w3-round kel-hover' onclick='setPath()'> Set Path </button>
+                </div>
+                <div class='w3-margin w3-border w3-round w3-padding' id='pathResponse'>
+                    Once path is set. It will be shown here.
+                </div>
+            </div>
+            <hr>
+            <div class='' id='showColumnNames'>
+                <div class='w3-section w3-padding'>
+                    <input type="checkbox" name="check" onclick="getColumnNames()" id="getColumnNames"> 
+                    <label for='getColumnNames' class='kel-hover'><b> Get Column Names </b></label>
+                </div>
+                <div id='columnNames' class='w3-margin' style='width:50%;min-width:400px'>
+                    <table class='w3-table w3-border' id='columnNamesTable'></table>
+                </div>
+            </div>
+            <hr>
+            <div class='' id='selectVars'>
+                <div class='w3-section w3-padding'>
+                    <label for='getColumnNames' class='kel-hover'><b> Please select dependent variables </b></label>
+                </div>
+
+                <div class='w3-margin'>
+                    <div id='' class='w3-bar'>
+                        <div class='w3-bar-item'>
+                            <select class='w3-padding w3-round w3-border' id="varData">
+                                <option value="" selected disabled>Select dependent variable</option>
+                            </select>
+                        </div>
+                        <div class='w3-bar-item'>
+                            <button class='w3-button kel-hover w3-theme w3-round' onclick='selectDependentVariable()'>
+                                <i class='fa fa-plus'></i> Select
+                            </button>
+                        </div>
+                    </div>
+                    <!--
+                        <div id='' class='w3-bar'>
+                        <div class='w3-bar-item'>
+                            <input type="text" list="columnsVars" class='w3-padding w3-round w3-border' placeholder="Start writing the name..." id="varData">
+                            <datalist id='columnsVars'></datalist>
+                        </div>
+                        <div class='w3-bar-item'>
+                            <button class='w3-button kel-hover w3-theme w3-round' onclick='addVar()'>
+                                <i class='fa fa-plus'></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class='w3-margin w3-padding w3-border w3-round' id='selectedVars' style='min-height:80px'>
+                    </div> 
+                    <center>
+                        <button class='w3-margin w3-button w3-round kel-hover w3-theme' onclick='selectDependentVars()'>Select</button>
+                    </center>
+                    -->
+                </div>
+                <div class='w3-margin w3-border w3-round w3-padding' id='dependentVarResponse'>
+                    Responses will be shown here
+                </div>
+            </div>
+            <hr>
+            <div class='' id='datasetView'>
+            <div class='w3-section w3-padding'>
+                <input type="checkbox" name="check" onclick="rowsSee()" id="check"> <label for='check' class='kel-hover'> <b> Want to see dataset? </b></label>
+            </div>
+            <div class='w3-section w3-padding' id='rowsInputField' style='display:none;'>
+                Select no of rows you want to see
+                <input class='w3-input w3-round w3-border' type="text" id='rowVal' placeholder='no of rows'>
+                <div class='w3-padding-16'>
+                    <button onclick='load()' class='w3-button kel-hover w3-round w3-theme'>Get</button>
+                </div>
+            </div>
+            <div class='w3-section w3-padding' id='table_rows' style='display: none;overflow:auto;max-height:300px'>
+                <table class='w3-table-all' id='tableDatasets'>
+                </table>
+            </div>
+            </div>
+            <hr>
+            <div class='' id='datasetdimension'>
+                <div class='w3-section w3-padding'>
+                    <input type="checkbox" name="check" onclick="dimensionSee()" id="dimensionC"> <label for='dimensionC' class='kel-hover'> <b> Dimension of dataset </b></label>
+                </div>
+                <div class='w3-section w3-padding w3-border w3-round w3-margin' id='dimensionView' style='display:none;min-height:40px'>
+                    
+                </div>
+            </div>
+            <hr>
+            <div class='' id='columnSpecificDataset'>
+                <div class='w3-section w3-padding'>
+                    <input type="checkbox" name="check" onclick="columnsDataset()" id="selectColumns"> <label for='selectColumns' class='kel-hover'><b>Select Columns to show </b></label>
+                </div>
+                <div id='columnShows' style='display: none;'>
+                    <div class='w3-margin w3-padding w3-border w3-round' id='columnTags' style='min-height:100px'>
+                    </div>
+                    <div class="autocomplete w3-margin" style="width:300px;">
+                        <input id="columnName" class='w3-padding w3-border w3-round' type="text" name="columnNames" placeholder="Column names">
+                        <span id='addBtnArea'>
+                        <span class='w3-theme w3-round w3-padding w3-hover-green kel-hover' id='plusColumn'> <i class='fa fa-plus'></i> </span>
+                        </span>
+                    </div>
+                    <div class='w3-margin' id='showColMar'>
+                        <button class='w3-button w3-theme kel-hover w3-round' id='showColumns'>Show Columns</button>
+                    </div>
+                    <div id='columnDatas' class='w3-margin' style='max-height:400px;overflow: scroll;'>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            
+            
+            <div class='' id='dynamicScatterPlot'>
+                <div class='w3-section w3-padding'>
+                    <input type="checkbox" name="check" onclick="showDynamicScatterPlot()" id="dynamicScatterPlotcheck"> <label for='dynamicScatterPlotcheck' class='kel-hover'> <b>See Scatter plot </b></label>
+                </div>
+                <div id='downArea' style='display: none;'>
+                    <div id='xyOptions' class='w3-row-padding'>
+                        <div id='xValue' class='w3-half w3-padding'>
+                        </div>
+                        <div id='yValue' class='w3-half w3-padding'>
+                        </div>
+                    </div>
+                    <div class='w3-center w3-padding-16'>
+                        <button class='w3-button w3-round w3-theme kel-hover' onclick='getDynamicScatterPlot()'>Get Graph</button>
+                    </div>
+                    <div id='dynamicScatterPlotShow' class='w3-center'>
+                        
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class='' id='2dPlot'>
+                <div class='w3-section w3-padding'>
+                    <input type="checkbox" name="check" onclick="start2dPlot()" id="2dPlotcheck"> <label for='2dPlotcheck' class='kel-hover'> <b>See 2D plots </b></label>
+                </div>
+                <div id='2dArea' style='display: none;'>
+                    <div id='2dxyOptions' class='w3-row-padding'>
+                        <div id='2dxValue' class='w3-half w3-padding'>
+                        </div>
+                        <div id='2dyValue' class='w3-half w3-padding'>
+                        </div>
+                    </div>
+                    <div class='w3-center w3-padding-16'>
+                        <button class='w3-button w3-round w3-theme kel-hover' onclick='get2DPlot()'>Get Graph</button>
+                    </div>
+                    <div id='2dPlotShow' class='w3-center'>
+                        
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class='' id='pieChartD'>
+                <div class='w3-section w3-padding'>
+                    <input type="checkbox" name="check" onclick="pieChartDependentVariable()" id="pieChart"> <label for='pieChart' class='kel-hover'> <b>Pie chart for dependent variable </b></label>
+                </div>                
+                <div id='pieChartShow' class='w3-center' style='display: none;'>
+                </div>  
+            </div>
+            <hr>
+            <div class='' id='statsColumns'>
+                <div class='w3-section w3-padding'>
+                    <input type="checkbox" name="check" onclick="showColumnsStats()" id="columnStats"> <label for='columnStats' class='kel-hover'> <b>See Statistics of each column </b></label>
+                </div>
+                <div id='chooseNames' style='display: none;'>
+                    <div id='xyOptions' class='w3-row-padding'>
+                        <div id='columnValue' class='w3-half w3-padding'>
+                        </div>
+                        <div id=operationValue' class='w3-half w3-padding'>
+                            <label for="operation">Operation</label>
+                            <select name="operation" id="operation" class='w3-input w3-border'>
+                                <option value="Total">Sum</option>
+                                <option value="Average">Average</option>
+                                <option value="Frequency">Frequency</option>
+                                <option value="univariateAnalysis">Univariate Analysis</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class='w3-center w3-padding-16'>
+                        <button class='w3-button w3-round w3-theme kel-hover' onclick='getStats()'>Get Stats</button>
+                    </div>
+                    <div id='columnStatsPlotShow' class='w3-center'>
+                        
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class='' id='pairPlot'>
+                <div class='w3-section w3-padding'>
+                    <input type="checkbox" name="check" onclick="showPairPlot()" id="getPairPlot"> <label for='getPairPlot' class='kel-hover'> <b>See PairPlot </b></label>
+                </div>
+                <div id='pairPlotShow' class='w3-center' style='display: none;'>
+                </div>
+            </div>
+            <hr>
+            <div class='' id='corelationPlot'>
+                <div class='w3-section w3-padding'>
+                    <input type="checkbox" name="check" onclick="getCorelationPlot()" id="getCorelationPlot"> <label for='getCorelationPlot' class='kel-hover'> <b>Get Corelation Plot </b></label>
+                </div>
+                <div id='CorelationPlotShow' class='w3-center' style='display: none;'>
+                </div>
+            </div>
+            <hr>
+            
+        </div>
+          
+    </div>
+    <script src="{% static 'Js/eda.js' %}"></script>
+</body>
+</html>

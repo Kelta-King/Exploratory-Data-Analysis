@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="{% static 'Style/theme.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>About us</title>
+    <style>
+        .kel-hover{
+            cursor:pointer;
+            transition-duration: 0.5s;
+        }
+    </style>
+    <script>
+        function openBar() {
+            document.getElementById("sidebar").style.display = "block";
+            document.getElementById("overlay").style.display = "block";
+        }
+        
+        function closeBar() {
+            document.getElementById("sidebar").style.display = "none";
+            document.getElementById("overlay").style.display = "none";
+        }
+        
+    </script>
+
+</head>
+<body>
+    <div class="w3-bar w3-theme w3-large" style="z-index:4">
+        <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="openBar();"><i class="fa fa-bars"></i>  Menu</button>
+        <span class="w3-bar-item w3-right">Logo</span>
+    </div>
+    {% include 'navUrls.html' with url='about' %}
+    <div class="w3-main" style="margin-left:350px">
+        <div class='w3-xlarge w3-text-gray w3-padding-64'>
+            This is about page
+        </div>
+        
+    </div>
+</body>
+</html>

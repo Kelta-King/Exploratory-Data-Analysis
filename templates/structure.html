@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <title>
+        {% block content %} 
+        {% endblock %}
+    </title>
+    <style>
+        .kel-hover{
+            cursor:pointer;
+            transition-duration: 0.5s;
+        }
+    </style>
+    <script>
+        function openBar() {
+            document.getElementById("mySidebar").style.display = "block";
+            document.getElementById("myOverlay").style.display = "block";
+        }
+        
+        function closeBar() {
+            document.getElementById("mySidebar").style.display = "none";
+            document.getElementById("myOverlay").style.display = "none";
+        }
+        function myFunction() {
+            var x = document.getElementById("Demo");
+            if (x.className.indexOf("w3-show") == -1) {
+                x.className += " w3-show";
+            } else { 
+                x.className = x.className.replace(" w3-show", "");
+            }
+        }
+    </script>
+
+</head>
+<body>
+    <nav class="w3-sidebar w3-light-gray w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
+        <div class="w3-container">
+            <a href="#" onclick="closeBar()" class="w3-hide-large w3-right kel-hover" title="close menu">
+                <i class="fa fa-remove"></i>
+            </a>
+        </div>
+        <div>
+            <form action="/check" method="get">
+            <center>
+            <div class='w3-text-red w3-xlarge'>{{ error }}</div>
+            <div class='w3-section'>
+                <select name='operation' class="w3-input w3-border kel-hover w3-round" style='width:80%'>
+                    <option href="" class='w3-bar-item w3-input' value='none' selected disabled>Select task</option>
+                    <option href="" class="w3-bar-item w3-input" value='eda'>Eda</option>
+                    <option href="" class="w3-bar-item w3-input" value='manual'>Manual</option>
+                    <option href="" class="w3-bar-item w3-input" value='thing'>Thing 3</option>
+                    <option href="" class="w3-bar-item w3-input" value='historical'>Historical</option>
+                    <option href="" class="w3-bar-item w3-input" value='about'>About</option>
+                </select>
+            </div>
+            <div class='w3-center'>
+                <button class='w3-button w3-round w3-blue kel-hover' type='submit'>Go!</button>
+            </div>
+            </center>
+            </form>
+        </div>
+    </nav>
+    <div class="w3-main" style="margin-left:300px">
+        <div class='w3-xxlarge w3-hide-large kel-hover' onclick='openBar()'>
+            <i class='fa fa-bars'></i>
+        </div>
+        {% block content %}
+        {% endblock %}
+    </div>
+    <script>
+        let rowsSee = () => {
+
+            let rowGiver = document.getElementById('rowsGiver');
+            let check = document.getElementById('check');
+            
+            if(rowGiver.style.display == "none" && check.checked == true){
+                rowGiver.style.display = "block";
+            }
+            else{
+                rowGiver.style.display = "none";
+                document.getElementById("rowVal").value = "";
+            }
+
+        }
+
+        let load = () => {
+
+            let n = document.getElementById('rowVal').value;
+
+            if(n == ""){
+                document.getElementById('rowVal').focus();
+                alert("mention the row value");
+                return false;
+            }
+
+            let bodyTable = document.getElementById('tableBody');
+            while (bodyTable.hasChildNodes()) {
+                bodyTable.removeChild(bodyTable.firstChild);
+            }
+
+            let xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function(){
+                
+                if(this.status == 200 && this.readyState == 4){
+                    let val = JSON.parse(this.responseText);
+                    
+                    let val1 = val[150];
+                    let val2 = val[4];
+                    let val3 = val['setosa'];
+                    let val4 = val['versicolor'];
+                    let val5 = val['virginica'];
+
+                    for(let i=0; i<n; i++){
+
+                        let tr = document.createElement("TR");
+                        let td1 = document.createElement("TD");
+                        let td2 = document.createElement("TD");
+                        let td3 = document.createElement("TD");
+                        let td4 = document.createElement("TD");
+                        let td5 = document.createElement("TD");
+                        
+                        td1.innerHTML = val1[i];
+                        td2.innerHTML = val2[i];
+                        td3.innerHTML = val3[i];
+                        td4.innerHTML = val4[i];
+                        td5.innerHTML = val5[i];
+                        
+                        tr.appendChild(td1);
+                        tr.appendChild(td2);
+                        tr.appendChild(td3);
+                        tr.appendChild(td4);
+                        tr.appendChild(td5);
+                        
+                        bodyTable.appendChild(tr);
+
+                    }
+
+                }
+
+            }
+            xhttp.open("GET", "getColumns?count="+n, true);
+            xhttp.send();
+
+        }
+    </script>
+</body>
+</html>

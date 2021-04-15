@@ -1,0 +1,31 @@
+{% load static %}
+<nav class="w3-sidebar w3-theme-l5 w3-collapse" style="z-index:3;width:350px;" id="sidebar"><br>
+    <div class="w3-container">
+        <div onclick="closeBar()" class="w3-hide-large w3-right kel-hover" title="close menu">
+            <i class="fa fa-remove"></i>
+        </div>
+    </div>
+    <div class='w3-center w3-padding w3-margin' style='height:200px'>
+        <img src="{% static 'Images/iris_flower.jpg' %}" style='height:100%' class='w3-image' alt="">
+    </div>
+    <div>
+        <div class='w3-bar-block'>
+            <div onclick='window.open("/eda", "_self")' class='w3-bar-item w3-leftbar kel-hover {% if url == 'eda' %} w3-theme w3-border-theme-dark {% else %} w3-theme-l5 w3-border-theme-light {% endif %}w3-hover-theme'>
+                EDA
+            </div>
+            <div onclick='window.open("/manual", "_self")' class='w3-bar-item w3-leftbar kel-hover {% if url == 'manual' %} w3-theme w3-border-theme-dark {% else %} w3-theme-l5 w3-border-theme-light {% endif %}w3-hover-theme'>
+                Manual
+            </div>
+            <div onclick='window.open("/batchPrediction", "_self")' class='w3-bar-item w3-leftbar kel-hover {% if url == 'batchPrediction' %} w3-theme w3-border-theme-dark {% else %} w3-theme-l5 w3-border-theme-light {% endif %}w3-hover-theme'>
+                Batch Prediction
+            </div>
+            <div onclick='window.open("/historical", "_self")' class='w3-bar-item w3-leftbar kel-hover {% if url == 'historical' %} w3-theme w3-border-theme-dark {% else %} w3-theme-l5 w3-border-theme-light {% endif %}w3-hover-theme'>
+                Historical
+            </div>
+            <div onclick='window.open("/about", "_self")' class='w3-bar-item w3-leftbar kel-hover {% if url == 'about' %} w3-theme w3-border-theme-dark {% else %} w3-theme-l5 w3-border-theme-light {% endif %}w3-hover-theme'>
+                About
+            </div>
+        </div>
+    </div>
+</nav>
+<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="closeBar()" style="cursor:pointer" id="overlay"></div>
