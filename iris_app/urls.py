@@ -19,10 +19,6 @@ from . import views
 
 urlpatterns = [
     #path('admin/', admin.site.urls),
-    path('', views.homePage),
     path('about/', include("about.urls")),
-    path('historical/', include("historical.urls")),
-    path('eda/', include('eda.urls')),
-    path('manual/', include('manual.urls')),
-    path('batchPrediction/', include('batchPrediction.urls')),
+    path('', include('eda.urls')),
 ]

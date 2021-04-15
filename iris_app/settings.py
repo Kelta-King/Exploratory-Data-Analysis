@@ -40,8 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'eda',
     'about',
-    'historical',
-    'manual',
 ]
 
 MIDDLEWARE = [
