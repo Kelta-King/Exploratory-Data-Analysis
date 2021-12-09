@@ -1,7 +1,7 @@
 <h1> Exploratory-Data-Analysis </h1>
 Application with different EDA features for csv/excel file data. Implemented in 
 <ul>
-  <li><a href='https://www.djangoproject.com/'>Djanog</a></li>
+  <li><a href='https://www.djangoproject.com/'>Django</a></li>
   <li><a href='https://www.javascript.com/'>Javascript</a></li>
 </ul>
 <br>
